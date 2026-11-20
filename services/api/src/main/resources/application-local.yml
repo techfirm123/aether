@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    url: ${AETHER_DB_URL:jdbc:postgresql://localhost:5432/aether}
+    username: ${AETHER_DB_USERNAME:aether_app}
+    password: ${AETHER_DB_PASSWORD}
+    hikari:
+      pool-name: AetherApiPool
+      connection-init-sql: SET search_path TO aether, public
+      maximum-pool-size: ${AETHER_DB_POOL_MAX_SIZE:10}
+      minimum-idle: ${AETHER_DB_POOL_MIN_IDLE:2}
+      connection-timeout: 30000
+      validation-timeout: 5000
+      keepalive-time: 120000
+
+  flyway:
+    enabled: true
+    url: ${AETHER_FLYWAY_URL:${AETHER_DB_URL:jdbc:postgresql://localhost:5432/aether}}
+    user: ${AETHER_FLYWAY_USERNAME:aether_migrator}
+    password: ${AETHER_FLYWAY_PASSWORD}
+    locations: classpath:db/migration
+    schemas: aether
+    default-schema: aether
+    create-schemas: true
+    clean-disabled: true
+    validate-on-migrate: true
+    baseline-on-migrate: false
+
+  sql:
+    init:
+      mode: never
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+logging:
+  structured:
+    format:
+      console: logstash

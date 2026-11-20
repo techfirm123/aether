@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: aether-api
+  profiles:
+    default: local
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+      show-components: never
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState,db
+  info:
+    env:
+      enabled: false
+
+info:
+  app:
+    name: AETHER API
+    description: Personal intelligence platform backend
+    version: ${AETHER_APP_VERSION:0.1.0-SNAPSHOT}
+
+logging:
+  level:
+    com.aether: INFO

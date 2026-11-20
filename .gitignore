@@ -1,0 +1,44 @@
+# Operating system
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Java / Gradle
+**/build/
+**/.gradle/
+**/out/
+*.class
+
+# Logs
+*.log
+logs/
+
+# Local databases and exports
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.backup
+
+# Node / React Native (future)
+node_modules/
+.expo/
+.metro-cache/
+
+# Android / iOS build output (future)
+**/.cxx/
+**/.gradle/
+**/local.properties
+**/DerivedData/
+**/*.xcuserstate
