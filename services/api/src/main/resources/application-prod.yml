@@ -29,6 +29,18 @@ spring:
     init:
       mode: never
 
+  mail:
+    host: ${AETHER_SMTP_HOST}
+    port: ${AETHER_SMTP_PORT:587}
+    username: ${AETHER_SMTP_USERNAME}
+    password: ${AETHER_SMTP_PASSWORD}
+    properties:
+      "[mail.smtp.auth]": true
+      "[mail.smtp.starttls.enable]": true
+      "[mail.smtp.connectiontimeout]": 5000
+      "[mail.smtp.timeout]": 3000
+      "[mail.smtp.writetimeout]": 5000
+
 springdoc:
   api-docs:
     enabled: false
@@ -39,3 +51,8 @@ logging:
   structured:
     format:
       console: logstash
+
+aether:
+  identity:
+    email:
+      from: ${AETHER_MAIL_FROM}

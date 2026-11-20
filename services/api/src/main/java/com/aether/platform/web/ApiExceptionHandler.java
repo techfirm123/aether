@@ -1,5 +1,6 @@
 package com.aether.platform.web;
 
+import com.aether.platform.identity.application.InvalidVerificationTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,11 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
 
 import java.net.URI;
 import java.time.Instant;
@@ -47,6 +48,21 @@ public class ApiExceptionHandler {
                 request);
 
         problem.setProperty("fieldErrors", fieldErrors);
+
+        return problemResponse(HttpStatus.BAD_REQUEST, problem);
+    }
+
+    @ExceptionHandler(InvalidVerificationTokenException.class)
+    public ResponseEntity<ProblemDetail> handleInvalidVerificationToken(
+            InvalidVerificationTokenException exception,
+            HttpServletRequest request) {
+
+        ProblemDetail problem = createProblem(
+                HttpStatus.BAD_REQUEST,
+                "Invalid verification token",
+                "The verification token is invalid or has expired.",
+                "INVALID_VERIFICATION_TOKEN",
+                request);
 
         return problemResponse(HttpStatus.BAD_REQUEST, problem);
     }

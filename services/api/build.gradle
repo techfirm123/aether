@@ -37,6 +37,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-flyway'
     implementation 'org.flywaydb:flyway-database-postgresql'
 
+    // Identity: adaptive password hashing
+    implementation 'org.springframework.security:spring-security-crypto'
+    implementation 'com.password4j:password4j:1.8.4'
+
+    // Email verification delivery
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
     // API documentation
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0'
 

@@ -1,6 +1,6 @@
 # AETHER — Product and Engineering Roadmap
 
-Version: 1.0
+Version: 1.1
 Last updated: 2026-11-20
 
 ## 1. Roadmap approach
@@ -25,89 +25,109 @@ Status: COMPLETED — locally validated.
 
 Delivered:
 
-- GitHub repository and main/develop branch foundation.
-- Backend project structure.
-- Java 21 and Spring Boot 4.1.3.
+- GitHub repository and branch foundation.
+- Java 21 and Spring Boot 4.1.3 backend.
 - Gradle 9.9.2.
-- PostgreSQL datasource configuration.
-- Separate application and migration database roles.
+- PostgreSQL datasource and database roles.
 - Flyway migration framework.
 - Initial AETHER schema migration.
-- Liveness and readiness endpoints.
-- Structured logging.
-- Request correlation IDs.
-- RFC 9457 Problem Details exception handling.
+- Health and readiness endpoints.
+- Structured logging and correlation IDs.
+- RFC 9457 Problem Details handling.
 - OpenAPI documentation.
 - Integration test foundation.
-- Initial GitHub Actions backend CI workflow.
-- Initial architecture documentation.
+- Initial GitHub Actions CI workflow.
+- Product principles and roadmap documentation.
 
 Validation:
 
-- 6/6 backend tests passed.
-- Local PostgreSQL connection succeeded.
-- Flyway V1 completed successfully.
-- Application started through IntelliJ Gradle configuration.
-- Health, liveness and readiness checks returned UP.
-- Swagger UI loaded successfully.
+- Six foundation tests passed.
+- PostgreSQL connectivity succeeded.
+- Flyway V1 succeeded.
+- Application started locally.
+- Health, liveness and readiness returned UP.
 
-The foundation is locally validated. Production deployment is not
-complete.
-
-## 3. Product capability roadmap
+Production deployment is not complete.
 
 ### Stage 1 — Identity, access and trust foundation
 
-Status: NEXT
+Status: IN PROGRESS.
 
 Goal:
 
 Establish secure user identity and access boundaries before introducing
 personal user data and business APIs.
 
-Planned slices:
+#### AETHER-002A — User registration and email verification
 
-#### Slice 2 — User identity and authentication
+Status: COMPLETED — locally validated.
 
-- User registration.
-- User account lifecycle.
-- Secure credential storage.
-- Authentication.
-- Session lifecycle and logout.
-- Account verification and recovery requirements.
-- Current-user identity resolution for protected APIs.
-- Security audit events.
-- Authorization foundation.
-- User data ownership boundaries.
+Delivered:
 
-Design decisions to resolve before implementation:
+- User registration API.
+- Email normalization.
+- User account lifecycle foundation.
+- Argon2id password hashing.
+- Separate password credential storage.
+- Cryptographically secure verification token generation.
+- SHA-256 verification-token hash storage.
+- 24-hour token expiry.
+- Single-use token enforcement.
+- Email verification API.
+- Account activation.
+- Identity audit events.
+- Local verification-token sender.
+- Production SMTP sender.
+- Registration and verification integration tests.
 
-- Authentication/session model.
-- Credential hashing approach.
-- Account verification workflow.
-- Session expiration and revocation behavior.
-- Password recovery workflow.
-- Abuse protection and rate limits.
+Validation:
+
+- Gradle test suite passed locally.
+- PostgreSQL Flyway V2 succeeded.
+- Registration API worked.
+- Email verification API worked.
+- Invalid and reused tokens were rejected.
+
+#### AETHER-002B — Authentication and session management
+
+Status: NEXT.
+
+Planned functionality:
+
+- Login using verified account credentials.
+- Opaque access tokens.
+- Refresh tokens.
+- Server-side session persistence.
+- Hashed refresh-token storage.
+- Token rotation and replay protection.
+- Session revocation.
+- Logout.
+- Spring Security bearer-token authentication.
+- Authenticated current-user endpoint.
+- User ownership and cross-user isolation tests.
 
 #### Subsequent identity slices
 
-- Trusted device enrollment and device identity.
-- Session and device management.
-- Platform operator identity.
-- Operator authorization and least-privilege access.
-- Stronger operator authentication before Admin Console exposure.
+- Account recovery and password reset.
+- Email verification resend.
+- Registration and login rate limiting.
+- Abuse protection.
+- Device enrollment and trusted device management.
+- Separate platform-operator identity.
+- Operator authorization and stronger authentication.
 
-The platform operator identity must not be treated as an ordinary
-end-user role with unrestricted access to personal content.
+Platform operators must not receive unrestricted access to personal
+user content.
 
 Stage exit conditions:
 
-- User accounts can be created and authenticated securely.
-- Account/session lifecycle is defined and tested.
+- Users can create accounts and authenticate securely.
+- Account and session lifecycle is defined and tested.
 - Protected APIs enforce authentication.
 - User ownership and authorization boundaries are testable.
-- Security-sensitive operations generate appropriate audit events.
+- Security-sensitive operations generate audit events.
 - PostgreSQL migrations are validated.
+- Critical account recovery and security requirements are addressed.
 
 ### Stage 2 — Android application foundation
 
@@ -119,21 +139,20 @@ React Native + TypeScript codebase.
 Planned capabilities:
 
 - Initialize the mobile application.
-- Establish navigation and app structure.
-- Establish environment and API configuration.
-- Implement onboarding and authentication screens.
+- Establish navigation and application structure.
+- Environment and API configuration.
+- Onboarding and authentication screens.
 - Connect to the AETHER API.
-- Establish secure local credential/session handling.
-- Introduce Android-specific Kotlin integrations only where required.
-- Establish application logging and crash diagnostics without
-  collecting personal content.
+- Secure local credential and session handling.
+- Android-specific Kotlin integrations where required.
+- Crash diagnostics without collecting personal content.
 
 Stage exit conditions:
 
 - Android application builds reliably.
-- A user can register/sign in and access the authenticated experience.
+- User can register, sign in and access the authenticated experience.
 - API errors and expired sessions are handled correctly.
-- Basic application navigation and lifecycle behavior are validated.
+- Basic navigation and lifecycle behavior are validated.
 
 ### Stage 3 — Conversational and voice intelligence
 
@@ -147,7 +166,7 @@ Planned capabilities:
 - Push-to-talk interaction.
 - Audio capture and playback.
 - Speech recognition and response generation.
-- Synchronized conversation transcript and interaction state.
+- Synchronized transcript and conversation state.
 - AI orchestration boundary.
 - Provider-independent model integration.
 - Configurable local/cloud provider selection.
@@ -155,16 +174,13 @@ Planned capabilities:
 - Conversation privacy and retention controls.
 
 The first implementation should focus on one validated provider path.
-Additional providers should be added only when they offer meaningful
-capability or reliability improvements.
 
 Stage exit conditions:
 
 - User can complete a useful voice interaction.
-- AETHER's visual interface reflects the interaction state.
+- Visual interface reflects the interaction state.
 - AI failures are handled safely and clearly.
-- Provider integration can evolve without rewriting core conversation
-  workflows.
+- Provider integration can evolve independently of core workflows.
 
 ### Stage 4 — Personal memory and context
 
@@ -188,7 +204,7 @@ when concrete semantic retrieval requirements justify it.
 
 Stage exit conditions:
 
-- Relevant memories can improve subsequent interactions.
+- Relevant memories improve subsequent interactions.
 - Users can inspect, correct and delete retained memories.
 - Retrieval is isolated to the authenticated user's data.
 - Memory behavior is tested for relevance, privacy and deletion.
@@ -208,15 +224,15 @@ Candidate capabilities:
 - Selected external integrations.
 - Personal information organization.
 
-These capabilities will be prioritized by actual user value. They will
-not all be implemented as one large release.
+Prioritize capabilities by actual user value. Do not implement all
+candidate capabilities as one large release.
 
 Stage exit conditions:
 
-- A selected workflow works end to end.
+- Selected workflows work end to end.
 - User data remains correctly isolated.
-- Important changes are visible and controllable by the user.
-- Failures and retries do not create duplicate or misleading outcomes.
+- Important changes are visible and controllable.
+- Failures do not create duplicate or misleading outcomes.
 
 ### Stage 6 — Proactive intelligence and action execution
 
@@ -236,8 +252,7 @@ Planned capabilities:
 - Cancellation and recovery where supported.
 - Idempotency and duplicate-action protection.
 
-Important actions remain approval-based. Greater autonomy should be
-introduced only after reliability and user trust are demonstrated.
+Important actions remain approval-based.
 
 Stage exit conditions:
 
@@ -250,7 +265,7 @@ Stage exit conditions:
 
 Goal:
 
-Provide platform operators with the information needed to operate and
+Provide platform operators with information needed to operate and
 improve AETHER.
 
 Planned capabilities:
@@ -300,8 +315,8 @@ Planned capabilities and controls:
 Stage exit conditions:
 
 - Production readiness checks pass.
-- Critical workflows have been tested on supported Android devices.
-- Operational monitoring and recovery procedures are established.
+- Critical workflows are tested on supported Android devices.
+- Monitoring and recovery procedures are established.
 - A controlled Android rollout is successful.
 
 ### Stage 9 — iOS implementation
@@ -321,11 +336,11 @@ Planned capabilities:
 
 Stage exit conditions:
 
-- Core AETHER workflows work consistently on iOS.
+- Core workflows work consistently on iOS.
 - iOS-specific privacy and permission behavior is validated.
-- The experience meets the same product quality expectations.
+- Experience meets the same product quality expectations.
 
-## 4. Cross-cutting engineering quality
+## 3. Cross-cutting engineering quality
 
 Each implementation slice must include appropriate:
 
@@ -357,10 +372,9 @@ Planned CI growth:
 9. Production approval and post-deployment verification.
 
 Required GitHub checks must report reliably for every relevant pull
-request. Component path filters must not leave required checks pending
-for unrelated changes.
+request. Component path filters must not leave required checks pending.
 
-## 5. Delivery workflow
+## 4. Delivery workflow
 
 - `main` remains production-ready.
 - `develop` is the integration branch.
@@ -372,15 +386,15 @@ for unrelated changes.
 For every vertical slice:
 
 1. Define the user problem and workflow.
-2. Confirm the slice scope and acceptance criteria.
-3. Design only the required UX, domain, API and data changes.
+2. Confirm scope and acceptance criteria.
+3. Design required UX, domain, API and data changes.
 4. Implement complete functionality.
 5. Validate locally and through automated tests.
-6. Update architecture and `AETHER_HANDOFF.md`.
+6. Update architecture and AETHER_HANDOFF.md.
 7. Commit and submit a pull request.
 8. Merge only after required validation passes.
 
-## 6. Scope discipline
+## 5. Scope discipline
 
 The roadmap is an evolving plan, not a commitment to implement every
 candidate capability.

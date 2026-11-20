@@ -47,3 +47,7 @@ info:
 logging:
   level:
     com.aether: INFO
+
+aether:
+  identity:
+    verification-token-ttl: PT24H
