@@ -82,9 +82,9 @@ class AetherApiApplicationTests {
     }
 
     @Test
-    void unknownRouteRemainsNotFound() throws Exception {
+    void unknownApiRouteRequiresAuthentication() throws Exception {
 
         mockMvc.perform(get("/api/v1/does-not-exist"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isUnauthorized());
     }
 }

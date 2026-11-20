@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.MDC;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Component
+@Order(-101)
 public class CorrelationIdFilter extends OncePerRequestFilter {
 
     public static final String HEADER_NAME = "X-Correlation-ID";
@@ -44,6 +46,7 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
     }
 
     private boolean isValidUuid(String candidate) {
-        return candidate != null && UUID_PATTERN.matcher(candidate).matches();
+        return candidate != null
+                && UUID_PATTERN.matcher(candidate).matches();
     }
 }
