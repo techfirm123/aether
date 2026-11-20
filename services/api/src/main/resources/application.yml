@@ -51,3 +51,5 @@ logging:
 aether:
   identity:
     verification-token-ttl: PT24H
+    access-token-ttl: PT10M
+    refresh-token-ttl: P30D

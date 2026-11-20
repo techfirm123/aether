@@ -1,5 +1,7 @@
 package com.aether.platform.web;
 
+import com.aether.platform.identity.application.InvalidCredentialsException;
+import com.aether.platform.identity.application.InvalidRefreshTokenException;
 import com.aether.platform.identity.application.InvalidVerificationTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -65,6 +67,36 @@ public class ApiExceptionHandler {
                 request);
 
         return problemResponse(HttpStatus.BAD_REQUEST, problem);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ProblemDetail> handleInvalidCredentials(
+            InvalidCredentialsException exception,
+            HttpServletRequest request) {
+
+        ProblemDetail problem = createProblem(
+                HttpStatus.UNAUTHORIZED,
+                "Authentication failed",
+                "Email or password is incorrect, or the account is not active.",
+                "INVALID_CREDENTIALS",
+                request);
+
+        return problemResponse(HttpStatus.UNAUTHORIZED, problem);
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<ProblemDetail> handleInvalidRefreshToken(
+            InvalidRefreshTokenException exception,
+            HttpServletRequest request) {
+
+        ProblemDetail problem = createProblem(
+                HttpStatus.UNAUTHORIZED,
+                "Refresh token rejected",
+                "The refresh token is invalid, expired or has been revoked.",
+                "INVALID_REFRESH_TOKEN",
+                request);
+
+        return problemResponse(HttpStatus.UNAUTHORIZED, problem);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

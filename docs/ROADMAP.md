@@ -1,6 +1,6 @@
 # AETHER — Product and Engineering Roadmap
 
-Version: 1.1
+Version: 1.2
 Last updated: 2026-11-20
 
 ## 1. Roadmap approach
@@ -51,7 +51,7 @@ Production deployment is not complete.
 
 ### Stage 1 — Identity, access and trust foundation
 
-Status: IN PROGRESS.
+Status: CORE IMPLEMENTATION COMPLETED — security hardening follow-ups remain.
 
 Goal:
 
@@ -60,7 +60,7 @@ personal user data and business APIs.
 
 #### AETHER-002A — User registration and email verification
 
-Status: COMPLETED — locally validated.
+Status: COMPLETED — locally validated and merged into develop.
 
 Delivered:
 
@@ -69,7 +69,7 @@ Delivered:
 - User account lifecycle foundation.
 - Argon2id password hashing.
 - Separate password credential storage.
-- Cryptographically secure verification token generation.
+- Cryptographically secure verification-token generation.
 - SHA-256 verification-token hash storage.
 - 24-hour token expiry.
 - Single-use token enforcement.
@@ -90,69 +90,100 @@ Validation:
 
 #### AETHER-002B — Authentication and session management
 
-Status: NEXT.
+Status: IMPLEMENTATION COMPLETED — locally validated.
 
-Planned functionality:
+Delivered:
 
 - Login using verified account credentials.
 - Opaque access tokens.
-- Refresh tokens.
-- Server-side session persistence.
-- Hashed refresh-token storage.
-- Token rotation and replay protection.
+- Opaque refresh tokens.
+- SHA-256 token hash storage.
+- PostgreSQL-backed sessions.
+- Ten-minute access-token lifetime.
+- Thirty-day absolute session lifetime.
+- Refresh-token rotation.
+- Refresh-token replay detection.
 - Session revocation.
 - Logout.
 - Spring Security bearer-token authentication.
-- Authenticated current-user endpoint.
-- User ownership and cross-user isolation tests.
+- Protected current-user endpoint.
+- Security audit events.
+- RFC 9457 authentication failure responses.
+- Correlation IDs on security failures.
 
-#### Subsequent identity slices
+Validation:
 
-- Account recovery and password reset.
+- Gradle test suite passed locally.
+- PostgreSQL Flyway V3 succeeded.
+- Application started successfully.
+- Login tested against PostgreSQL.
+- Authenticated current-user API tested.
+- Refresh-token rotation tested.
+- Previous access token rejected after rotation.
+- Newly issued access token accepted.
+- Session and token records inspected in PostgreSQL.
+- Correlation ID returned on unauthorized requests.
+
+Automated integration tests cover replay detection, logout,
+unauthorized access and user identity isolation.
+
+Manual UI validation of logout and replay behavior is deferred until
+the Android application is available.
+
+#### Identity security follow-ups
+
+These are not complete yet:
+
+- Login and registration rate limiting.
+- Abuse detection and protection.
 - Email verification resend.
-- Registration and login rate limiting.
-- Abuse protection.
-- Device enrollment and trusted device management.
-- Separate platform-operator identity.
-- Operator authorization and stronger authentication.
+- Password recovery.
+- Transactional email outbox and retries.
+- Trusted device enrollment.
+- Session management UI.
+- Platform-operator authentication and authorization.
+- Production security review.
 
-Platform operators must not receive unrestricted access to personal
-user content.
-
-Stage exit conditions:
-
-- Users can create accounts and authenticate securely.
-- Account and session lifecycle is defined and tested.
-- Protected APIs enforce authentication.
-- User ownership and authorization boundaries are testable.
-- Security-sensitive operations generate audit events.
-- PostgreSQL migrations are validated.
-- Critical account recovery and security requirements are addressed.
+These items must be addressed before production rollout.
 
 ### Stage 2 — Android application foundation
+
+Status: NEXT.
 
 Goal:
 
 Establish the first usable Android application using the shared
 React Native + TypeScript codebase.
 
-Planned capabilities:
+The first mobile release will focus on completing the user identity
+experience and establishing the authenticated application shell.
 
-- Initialize the mobile application.
-- Establish navigation and application structure.
-- Environment and API configuration.
-- Onboarding and authentication screens.
-- Connect to the AETHER API.
-- Secure local credential and session handling.
-- Android-specific Kotlin integrations where required.
-- Crash diagnostics without collecting personal content.
+#### Initial mobile slices
+
+- Initialize React Native + TypeScript application.
+- Establish project structure and navigation.
+- Set up development and API environments.
+- Build registration and login screens.
+- Integrate registration and email verification APIs.
+- Integrate login and current-user APIs.
+- Implement Android-backed secure credential storage.
+- Implement refresh-token handling.
+- Serialize refresh requests to avoid accidental token reuse.
+- Implement logout.
+- Handle loading, error and expired-session states.
+- Establish an authenticated application shell.
+
+Android native integrations will use Kotlin where required.
 
 Stage exit conditions:
 
 - Android application builds reliably.
-- User can register, sign in and access the authenticated experience.
-- API errors and expired sessions are handled correctly.
-- Basic navigation and lifecycle behavior are validated.
+- User can register and verify an account.
+- User can log in and access the authenticated experience.
+- Credentials are stored securely on device.
+- Refresh and logout work through the mobile interface.
+- Expired and revoked sessions are handled correctly.
+- Core identity workflows are validated on an Android device.
 
 ### Stage 3 — Conversational and voice intelligence
 
